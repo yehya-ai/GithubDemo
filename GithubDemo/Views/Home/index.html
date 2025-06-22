@@ -1,0 +1,35 @@
+
+@model List<BookLibraryExam.Models.Book>
+@{
+    ViewBag.Title = "Books";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Books Inventory</h2>
+<p><a href="@Url.Action("Create")" class="btn btn-primary">Add New Book</a></p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th><th>Author</th><th>ISBN</th><th>Year</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.ISBN</td>
+                <td>@book.PublicationYear</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = book.Id }, new { @class = "btn btn-warning btn-sm" })
+                    @using (Html.BeginForm("Delete", "Books", new { id = book.Id }, FormMethod.Post))
+                    {
+                        <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
