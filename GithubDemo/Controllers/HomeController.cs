@@ -1,32 +1,68 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using BookLibraryExam.Models;
 
-namespace WebApplication1.Controllers
+namespace BookLibraryExam.Controllers
 {
-    public class HomeController : Controller
+    public class BooksController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private static List<Book> books = new List<Book>();
 
-        public HomeController(ILogger<HomeController> logger)
+        public ActionResult Index()
         {
-            _logger = logger;
+            return View(books);
         }
 
-        public IActionResult Index()
+        public ActionResult Create()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public ActionResult Create(Book book)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                book.Id = books.Count + 1;
+                books.Add(book);
+                return RedirectToAction("Index");
+            }
+            return View(book);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public ActionResult Edit(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var book = books.FirstOrDefault(b => b.Id == id);
+            if (book == null) return HttpNotFound();
+            return View(book);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                var b = books.FirstOrDefault(x => x.Id == book.Id);
+                if (b == null) return HttpNotFound();
+                b.Title = book.Title;
+                b.Author = book.Author;
+                b.ISBN = book.ISBN;
+                b.PublicationYear = book.PublicationYear;
+                return RedirectToAction("Index");
+            }
+            return View(book);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var b = books.FirstOrDefault(x => x.Id == id);
+            if (b != null) books.Remove(b);
+            return RedirectToAction("Index");
         }
     }
 }
+
+
+
