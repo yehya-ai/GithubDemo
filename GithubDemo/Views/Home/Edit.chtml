@@ -1,0 +1,40 @@
+
+@model BookLibraryExam.Models.Book
+@{
+    ViewBag.Title = "Edit Book";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Book</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title)
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Author)
+        @Html.TextBoxFor(m => m.Author, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Author)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ISBN)
+        @Html.TextBoxFor(m => m.ISBN, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ISBN)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PublicationYear)
+        @Html.TextBoxFor(m => m.PublicationYear, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PublicationYear)
+    </div>
+
+    <input type="submit" value="Update" class="btn btn-primary" />
+}
